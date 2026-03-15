@@ -1,0 +1,339 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+    .hero-section {
+        position: relative;
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        height: 600px;
+        display: flex;
+        align-items: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px 20px;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: none;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dosha-card {
+        border-radius: 15px;
+        padding: 25px 20px;
+        height: 100%;
+        color: white;
+        transition: transform 0.3s;
+    }
+    
+    .dosha-card:hover {
+        transform: scale(1.05);
+    }
+    
+    .dosha-card.vata {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .dosha-card.pitta {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+    
+    .dosha-card.kapha {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    .tip-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        height: 100%;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+        border-left: 4px solid #2e7d32;
+    }
+    
+    .tip-card:hover {
+        box-shadow: 0 10px 30px rgba(46, 125, 50, 0.15);
+    }
+    
+    .section-title {
+        position: relative;
+        margin-bottom: 50px;
+        padding-bottom: 20px;
+    }
+    
+    .section-title:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: #2e7d32;
+    }
+    
+    .about-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2e7d32;
+    }
+    
+    .empty-state {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 60px 20px;
+        text-align: center;
+        border: 2px dashed #dee2e6;
+    }
+    
+    .btn-ayur {
+        background: #2e7d32;
+        color: white;
+        padding: 10px 30px;
+        border-radius: 50px;
+        border: none;
+        transition: all 0.3s;
+    }
+    
+    .btn-ayur:hover {
+        background: #1e5f22;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+    }
+    
+    .floating {
+        animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+</style>
+
+<!-- Hero Section with Background Image -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-4 animate__animated animate__fadeInDown floating">Welcome to AyurPrevent 🌿</h1>
+        <p class="lead mb-4 animate__animated animate__fadeInUp">Prevent Diseases Naturally with Ayurveda - Ancient Wisdom for Modern Wellness</p>
+        <a href="#features" class="btn btn-ayur btn-lg animate__animated animate__fadeInUp">Explore Now</a>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5" id="about">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2 class="display-5 fw-bold">What is Preventive Healthcare?</h2>
+            <p class="text-muted">Understanding the ancient wisdom of Ayurveda</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="about-card text-center">
+                    <p class="lead mb-0">
+                        Preventive healthcare in Ayurveda focuses on maintaining balance between Vata, Pitta, and Kapha through proper diet, lifestyle, and natural remedies. It's not just about treating illness, but about creating an environment of wellness that prevents disease
+                        from taking hold.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light" id="features">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2 class="display-5 fw-bold">Our Features</h2>
+            <p class="text-muted">Discover what we offer for your wellness journey</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-disease fa-3x" style="color: #2e7d32;"></i>
+                    </div>
+                    <h3 class="h4">Diseases</h3>
+                    <p class="text-muted">Learn about various diseases and their Ayurvedic causes, symptoms, and preventive measures.</p>
+                    <a href="/diseases/" class="btn btn-outline-success btn-sm">Learn More →</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-leaf fa-3x" style="color: #2e7d32;"></i>
+                    </div>
+                    <h3 class="h4">Remedies</h3>
+                    <p class="text-muted">Discover natural home remedies using common ingredients for common ailments.</p>
+                    <a href="/remedies/" class="btn btn-outline-success btn-sm">Explore →</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-heartbeat fa-3x" style="color: #2e7d32;"></i>
+                    </div>
+                    <h3 class="h4">Health Tips</h3>
+                    <p class="text-muted">Daily lifestyle tips and practices for maintaining optimal health and wellness.</p>
+                    <a href="/tips/" class="btn btn-outline-success btn-sm">View Tips →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Diet Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2 class="display-5 fw-bold">Ayurvedic Diet Recommendation</h2>
+            <p class="text-muted">Personalized nutrition based on your dosha type</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="dosha-card vata text-center">
+                    <h3 class="h3 mb-3">Vata</h3>
+                    <p class="mb-0">Warm, cooked foods, rice, milk, ghee, nuts, and sweet fruits. Avoid cold and dry foods.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dosha-card pitta text-center">
+                    <h3 class="h3 mb-3">Pitta</h3>
+                    <p class="mb-0">Cooling foods like cucumber, coconut water, sweet fruits, and leafy greens. Avoid spicy foods.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="dosha-card kapha text-center">
+                    <h3 class="h3 mb-3">Kapha</h3>
+                    <p class="mb-0">Light, warm foods like barley, vegetables, legumes, and honey. Avoid heavy, oily foods.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <p class="text-muted mb-0">Diseases Covered</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <p class="text-muted mb-0">Natural Remedies</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">30+</div>
+                    <p class="text-muted mb-0">Health Tips</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number">1000+</div>
+                    <p class="text-muted mb-0">Happy Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Health Tips from DB -->
+<section class="py-5">
+    <div class="container">
+        <div class="section-title text-center">
+            <h2 class="display-5 fw-bold">Daily Health Tips</h2>
+            <p class="text-muted">Ayurvedic wisdom for your daily routine</p>
+        </div>
+
+        <div class="row g-4">
+            {% for tip in tips %}
+            <div class="col-md-4">
+                <div class="tip-card">
+                    <h4 class="h5 mb-3" style="color: #2e7d32;">{{ tip.title }}</h4>
+                    <p class="text-muted mb-3">{{ tip.content|truncatechars:100 }}</p>
+                    <a href="#" class="text-success text-decoration-none">Read More →</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="fas fa-info-circle fa-3x text-muted mb-3"></i>
+                    <h4 class="h5">No Health Tips Yet</h4>
+                    <p class="text-muted">Please add health tips from the admin panel to see them here.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if tips %}
+        <div class="text-center mt-5">
+            <a href="/tips/" class="btn btn-ayur">View All Tips</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h3 class="h4 mb-3">Subscribe to Our Newsletter</h3>
+                <p class="text-muted mb-4">Get weekly Ayurvedic tips and wellness advice delivered to your inbox.</p>
+                <form class="row g-2 justify-content-center">
+                    <div class="col-md-6">
+                        <input type="email" class="form-control form-control-lg" placeholder="Enter your email">
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-ayur btn-lg">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Font Awesome and Animation Libraries -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> {% endblock %}

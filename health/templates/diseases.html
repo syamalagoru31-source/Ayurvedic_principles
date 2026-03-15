@@ -1,0 +1,1230 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+    /* Global Styles */
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f8faf8 0%, #f0f5f0 100%);
+    }
+    /* Disease Section */
+    
+    .disease-section {
+        position: relative;
+        padding: 80px 0;
+        background: linear-gradient(135deg, rgba(46, 125, 50, 0.03) 0%, rgba(27, 94, 32, 0.03) 100%);
+        overflow: hidden;
+    }
+    /* Decorative Background Elements */
+    
+    .disease-section::before {
+        content: '🌿';
+        position: absolute;
+        top: 50px;
+        left: 30px;
+        font-size: 150px;
+        opacity: 0.03;
+        transform: rotate(-15deg);
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .disease-section::after {
+        content: '🕉️';
+        position: absolute;
+        bottom: 50px;
+        right: 30px;
+        font-size: 200px;
+        opacity: 0.03;
+        transform: rotate(15deg);
+        animation: float 10s ease-in-out infinite reverse;
+    }
+    /* Container */
+    
+    .disease-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+    /* Header Section */
+    
+    .disease-header {
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+    }
+    
+    .disease-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        position: relative;
+        display: inline-block;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .disease-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 2px;
+        animation: expandWidth 1s ease 0.5s both;
+    }
+    
+    .disease-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 30px auto 0;
+        line-height: 1.8;
+        animation: fadeInUp 1s ease 0.2s both;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.7);
+        webkit-backdrop-filter: blur(10px);
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    /* Search and Filter Section */
+    
+    .search-section {
+        margin-bottom: 40px;
+        animation: fadeInUp 1s ease 0.3s both;
+    }
+    
+    .search-box {
+        position: relative;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .search-box input {
+        width: 100%;
+        padding: 18px 25px 18px 60px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .search-box input:focus {
+        outline: none;
+        box-shadow: 0 15px 40px rgba(46, 125, 50, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .search-box i {
+        position: absolute;
+        left: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #2e7d32;
+        font-size: 1.2rem;
+    }
+    /* Category Filters */
+    
+    .category-filters {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .category-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 30px;
+        background: white;
+        color: #555;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .category-btn:hover,
+    .category-btn.active {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+    }
+    /* Disease Cards Grid */
+    
+    .disease-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    /* Disease Card */
+    
+    .disease-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        position: relative;
+        animation: fadeInUp 0.6s ease backwards;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .disease-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+    
+    .disease-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .disease-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+    
+    .disease-card:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+    
+    .disease-card:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+    
+    .disease-card:nth-child(6) {
+        animation-delay: 0.6s;
+    }
+    
+    .disease-card:nth-child(7) {
+        animation-delay: 0.7s;
+    }
+    
+    .disease-card:nth-child(8) {
+        animation-delay: 0.8s;
+    }
+    
+    .disease-card:nth-child(9) {
+        animation-delay: 0.9s;
+    }
+    
+    .disease-card:nth-child(10) {
+        animation-delay: 1s;
+    }
+    
+    .disease-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(46, 125, 50, 0.2);
+    }
+    /* Card Image */
+    
+    .card-image {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .disease-card:hover .card-image img {
+        transform: scale(1.1);
+    }
+    
+    .card-image::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: linear-gradient(to top, white, transparent);
+    }
+    /* Card Icon Overlay */
+    
+    .card-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.95);
+        webkit-backdrop-filter: blur(5px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        animation: float 3s ease-in-out infinite;
+    }
+    /* Card Content */
+    
+    .card-content {
+        padding: 30px 25px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .disease-card h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2e7d32;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .disease-card h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+    
+    .disease-card:hover h3::after {
+        width: 80px;
+    }
+    /* Info Sections */
+    
+    .info-section {
+        margin-bottom: 20px;
+    }
+    
+    .info-section h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .info-section h4 i {
+        color: #2e7d32;
+        font-size: 1.2rem;
+    }
+    
+    .info-section p {
+        color: #666;
+        line-height: 1.6;
+        margin-left: 28px;
+        font-size: 0.95rem;
+    }
+    /* Symptoms Tags */
+    
+    .symptoms-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 15px 0;
+    }
+    
+    .symptom-tag {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        color: #2e7d32;
+        padding: 8px 15px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .symptom-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(46, 125, 50, 0.2);
+    }
+    /* Remedies List */
+    
+    .remedies-list {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 15px;
+    }
+    
+    .remedies-list h4 {
+        color: #e65100 !important;
+    }
+    
+    .remedy-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+    }
+    
+    .remedy-item:last-child {
+        border-bottom: none;
+    }
+    
+    .remedy-item i {
+        color: #e65100;
+        font-size: 1rem;
+    }
+    /* Prevention Tips */
+    
+    .prevention-tips {
+        background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+        padding: 20px;
+        border-radius: 20px;
+        margin-top: 15px;
+    }
+    
+    .prevention-tips h4 {
+        color: #0277bd !important;
+    }
+    /* Quick Actions */
+    
+    .quick-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid #f0f0f0;
+    }
+    
+    .action-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .action-btn.learn-more {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+    }
+    
+    .action-btn.save {
+        background: #f5f5f5;
+        color: #666;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    /* Pagination */
+    
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+    
+    .page-btn {
+        width: 45px;
+        height: 45px;
+        border: none;
+        border-radius: 15px;
+        background: white;
+        color: #666;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .page-btn:hover,
+    .page-btn.active {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(46, 125, 50, 0.3);
+    }
+    /* Animations */
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-15px) rotate(3deg);
+        }
+    }
+    
+    @keyframes expandWidth {
+        from {
+            width: 0;
+        }
+        to {
+            width: 120px;
+        }
+    }
+    
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+    /* Responsive Design */
+    
+    @media (max-width: 768px) {
+        .disease-section {
+            padding: 50px 20px;
+        }
+        .disease-title {
+            font-size: 2.5rem;
+        }
+        .disease-subtitle {
+            font-size: 1rem;
+            padding: 15px 20px;
+        }
+        .disease-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .card-image {
+            height: 180px;
+        }
+        .disease-card h3 {
+            font-size: 1.5rem;
+        }
+        .category-filters {
+            gap: 10px;
+        }
+        .category-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+        .disease-section::before,
+        .disease-section::after {
+            font-size: 80px;
+        }
+    }
+    /* Loading Animation */
+    
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 50px;
+    }
+    
+    .loading-spinner.active {
+        display: block;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f0f0f0;
+        border-top: 5px solid #2e7d32;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    /* Tooltip */
+    
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background: #333;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+        position: absolute;
+        z-index: 10;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.9rem;
+    }
+    
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<!-- Add Poppins Font and Font Awesome -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Disease Section -->
+<div class="disease-section">
+    <div class="container">
+        <div class="disease-container">
+
+            <!-- Header -->
+            <div class="disease-header">
+                <h1 class="disease-title">Common Diseases & Conditions</h1>
+                <p class="disease-subtitle">
+                    Discover Ayurvedic insights into common health conditions. Learn about symptoms, prevention, and natural remedies.
+                </p>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="search-section">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search for diseases or symptoms...">
+                </div>
+
+                <div class="category-filters">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="pain">Pain</button>
+                    <button class="category-btn" data-category="respiratory">Respiratory</button>
+                    <button class="category-btn" data-category="digestive">Digestive</button>
+                    <button class="category-btn" data-category="fever">Fever</button>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner"></div>
+                <p style="margin-top: 20px; color: #2e7d32;">Loading diseases...</p>
+            </div>
+
+            <!-- Diseases Grid -->
+            <div class="disease-grid" id="diseaseGrid">
+
+                <!-- Leg Pain Card -->
+                <div class="disease-card" data-category="pain">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1579168765467-3b235f938439?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Leg Pain">
+                        <div class="card-icon">🦵</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Leg Pain</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Pain in the legs caused by muscle strain, nerve compression, or poor circulation.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Muscle cramps</span>
+                                <span class="symptom-tag">Swelling</span>
+                                <span class="symptom-tag">Stiffness</span>
+                                <span class="symptom-tag">Difficulty walking</span>
+                            </div>
+                        </div>
+                        <div class="prevention-tips">
+                            <h4><i class="fas fa-shield-alt"></i> Prevention</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Regular stretching</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Oil massage (Abhyanga)</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Proper hydration</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Balanced diet</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more tooltip">
+                                <i class="fas fa-leaf"></i> Remedies
+                                <span class="tooltiptext">View Ayurvedic treatments for leg pain</span>
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stomach Pain Card -->
+                <div class="disease-card" data-category="digestive">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1584362917165-526a968579e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Stomach Pain">
+                        <div class="card-icon">🍵</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Stomach Pain</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Abdominal discomfort due to indigestion, gas, or improper food habits.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Bloating</span>
+                                <span class="symptom-tag">Cramps</span>
+                                <span class="symptom-tag">Nausea</span>
+                                <span class="symptom-tag">Burning sensation</span>
+                            </div>
+                        </div>
+                        <div class="prevention-tips">
+                            <h4><i class="fas fa-shield-alt"></i> Prevention</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Regular meal timings</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Avoid junk food</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Drink warm water</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Practice yoga</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Knee Pain Card -->
+                <div class="disease-card" data-category="pain">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Knee Pain">
+                        <div class="card-icon">🦿</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Knee Pain</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Joint pain caused by arthritis, injury, or aging.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Swelling</span>
+                                <span class="symptom-tag">Stiffness</span>
+                                <span class="symptom-tag">Difficulty bending</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Herbal oils massage</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Turmeric milk</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Regular exercise</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Back Pain Card -->
+                <div class="disease-card" data-category="pain">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Back Pain">
+                        <div class="card-icon">🧘</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Back Pain</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Pain in the lower or upper back due to poor posture or muscle strain.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Stiffness</span>
+                                <span class="symptom-tag">Muscle tension</span>
+                                <span class="symptom-tag">Sharp pain</span>
+                            </div>
+                        </div>
+                        <div class="prevention-tips">
+                            <h4><i class="fas fa-shield-alt"></i> Prevention</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Correct posture</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Yoga (Bhujangasana)</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Ayurvedic oil massage</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Headache Card -->
+                <div class="disease-card" data-category="pain">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Headache">
+                        <div class="card-icon">🤕</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Headache</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Pain in the head due to stress, dehydration, or sinus issues.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Throbbing pain</span>
+                                <span class="symptom-tag">Light sensitivity</span>
+                                <span class="symptom-tag">Nausea</span>
+                            </div>
+                        </div>
+                        <div class="prevention-tips">
+                            <h4><i class="fas fa-shield-alt"></i> Prevention</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Adequate sleep</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Meditation</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-check"></i>
+                                <span>Stay hydrated</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fever Card -->
+                <div class="disease-card" data-category="fever">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1584515933487-779824d8a33a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Fever">
+                        <div class="card-icon">🌡️</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Fever</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Rise in body temperature usually caused by infection.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">High temperature</span>
+                                <span class="symptom-tag">Sweating</span>
+                                <span class="symptom-tag">Weakness</span>
+                                <span class="symptom-tag">Chills</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Tulsi tea</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Turmeric milk</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Adequate rest</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cough Card -->
+                <div class="disease-card" data-category="respiratory">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Cough">
+                        <div class="card-icon">🤧</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Cough</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Irritation in throat due to infection or allergy.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Dry cough</span>
+                                <span class="symptom-tag">Throat pain</span>
+                                <span class="symptom-tag">Chest discomfort</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Honey with ginger</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Steam inhalation</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cold Card -->
+                <div class="disease-card" data-category="respiratory">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Cold">
+                        <div class="card-icon">❄️</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Cold</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Viral infection affecting nose and throat.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Runny nose</span>
+                                <span class="symptom-tag">Sneezing</span>
+                                <span class="symptom-tag">Mild fever</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Warm fluids</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Ginger tea</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Steam inhalation</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stomach Infection Card -->
+                <div class="disease-card" data-category="digestive">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1584362917165-526a968579e8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Stomach Infection">
+                        <div class="card-icon">🍲</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Stomach Infection</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Infection in digestive system caused by bacteria or contaminated food.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Diarrhea</span>
+                                <span class="symptom-tag">Vomiting</span>
+                                <span class="symptom-tag">Stomach cramps</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>ORS solution</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Rice water</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Light diet</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Throat Infection Card -->
+                <div class="disease-card" data-category="respiratory">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Throat Infection">
+                        <div class="card-icon">🗣️</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Throat Infection</h3>
+                        <div class="info-section">
+                            <h4><i class="fas fa-info-circle"></i> Description</h4>
+                            <p>Infection causing inflammation and pain in throat.</p>
+                        </div>
+                        <div class="info-section">
+                            <h4><i class="fas fa-thermometer-half"></i> Symptoms</h4>
+                            <div class="symptoms-tags">
+                                <span class="symptom-tag">Sore throat</span>
+                                <span class="symptom-tag">Difficulty swallowing</span>
+                                <span class="symptom-tag">Fever</span>
+                            </div>
+                        </div>
+                        <div class="remedies-list">
+                            <h4><i class="fas fa-mortar-pestle"></i> Remedies</h4>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Salt water gargle</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Turmeric milk</span>
+                            </div>
+                            <div class="remedy-item">
+                                <i class="fas fa-seedling"></i>
+                                <span>Warm fluids</span>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <button class="action-btn learn-more">
+                                <i class="fas fa-leaf"></i> Remedies
+                            </button>
+                            <button-type class="action-btn save">
+                                <i class="far fa-bookmark"></i>
+                                </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button-type class="page-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button-type class="page-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Search and Filter -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const diseaseCards = document.querySelectorAll('.disease-card');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            filterDiseases();
+        });
+
+        // Category filter
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterDiseases();
+            });
+        });
+
+        function filterDiseases() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+
+            diseaseCards.forEach(card => {
+                const cardText = card.textContent.toLowerCase();
+                const cardCategory = card.dataset.category;
+
+                const matchesSearch = cardText.includes(searchTerm);
+                const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Smooth scroll to top when clicking page buttons
+        const pageBtns = document.querySelectorAll('.page-btn');
+        pageBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: document.querySelector('.disease-section').offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Save button functionality
+        const saveBtns = document.querySelectorAll('.action-btn.save');
+        saveBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    icon.style.color = '#2e7d32';
+
+                    // Show toast notification (you can implement this)
+                    alert('Saved to your remedies collection!');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    icon.style.color = '#666';
+                }
+            });
+        });
+
+        // Learn more button functionality
+        const learnMoreBtns = document.querySelectorAll('.action-btn.learn-more');
+        learnMoreBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const diseaseCard = this.closest('.disease-card');
+                const diseaseName = diseaseCard.querySelector('h3').textContent;
+                alert(`Viewing detailed remedies for ${diseaseName}. This will open a detailed page.`);
+            });
+        });
+
+        // Simulate loading
+        setTimeout(() => {
+            loadingSpinner.classList.remove('active');
+        }, 1000);
+    });
+</script>
+
+{% endblock %}

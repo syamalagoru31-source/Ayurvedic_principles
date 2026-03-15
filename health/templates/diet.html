@@ -1,0 +1,1165 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+    /* Global Styles */
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f8faf8 0%, #f0f5f0 100%);
+    }
+    /* Diet Section */
+    
+    .diet-section {
+        position: relative;
+        padding: 80px 0;
+        background: linear-gradient(135deg, rgba(46, 125, 50, 0.03) 0%, rgba(27, 94, 32, 0.03) 100%);
+        overflow: hidden;
+    }
+    /* Decorative Background Elements */
+    
+    .diet-section::before {
+        content: '🌿';
+        position: absolute;
+        top: 50px;
+        left: 30px;
+        font-size: 150px;
+        opacity: 0.03;
+        transform: rotate(-15deg);
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .diet-section::after {
+        content: '🍚';
+        position: absolute;
+        bottom: 50px;
+        right: 30px;
+        font-size: 200px;
+        opacity: 0.03;
+        transform: rotate(15deg);
+        animation: float 10s ease-in-out infinite reverse;
+    }
+    /* Container */
+    
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+    /* Header Section */
+    
+    .diet-header {
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+    }
+    
+    .diet-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        position: relative;
+        display: inline-block;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .diet-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 2px;
+        animation: expandWidth 1s ease 0.5s both;
+    }
+    
+    .diet-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 30px auto 0;
+        line-height: 1.8;
+        animation: fadeInUp 1s ease 0.2s both;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.7);
+        webkit-backdrop-filter: blur(10px);
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    /* Dosha Cards Grid */
+    
+    .dosha-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+        margin-bottom: 60px;
+    }
+    /* Diet Card */
+    
+    .diet-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        position: relative;
+        animation: fadeInUp 0.6s ease backwards;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .diet-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+    
+    .diet-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .diet-card:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+    
+    .diet-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(46, 125, 50, 0.2);
+    }
+    /* Card Header with Dosha-specific colors */
+    
+    .card-header {
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-header.vata {
+        background: linear-gradient(135deg, #6c5ce7 0%, #a463f5 100%);
+    }
+    
+    .card-header.pitta {
+        background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+    }
+    
+    .card-header.kapha {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    }
+    
+    .card-header img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.3;
+        mix-blend-mode: overlay;
+    }
+    
+    .dosha-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.95);
+        webkit-backdrop-filter: blur(5px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .dosha-title {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 2;
+    }
+    /* Card Content */
+    
+    .card-content {
+        padding: 30px 25px;
+        flex-grow: 1;
+    }
+    
+    .dosha-subtitle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: #666;
+        font-size: 1rem;
+    }
+    
+    .dosha-subtitle i {
+        color: #2e7d32;
+    }
+    /* Food Categories */
+    
+    .food-category {
+        margin-bottom: 25px;
+    }
+    
+    .category-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .category-title i {
+        color: #2e7d32;
+    }
+    /* Food Items Grid */
+    
+    .food-items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .food-item {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 12px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .food-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .food-item.vata:hover {
+        background: linear-gradient(135deg, #6c5ce7 0%, #a463f5 100%);
+        color: white;
+    }
+    
+    .food-item.pitta:hover {
+        background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+        color: white;
+    }
+    
+    .food-item.kapha:hover {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        color: white;
+    }
+    
+    .food-item img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 8px;
+        border: 3px solid white;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .food-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    /* Food Preparation Modal */
+    
+    .preparation-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        webkit-backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .preparation-modal.active {
+        display: flex;
+    }
+    
+    .modal-content {
+        background: white;
+        border-radius: 30px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 40px;
+        position: relative;
+        animation: slideInUp 0.3s ease;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: #f0f0f0;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .close-modal:hover {
+        background: #e0e0e0;
+        transform: rotate(90deg);
+    }
+    
+    .modal-food-image {
+        width: 100%;
+        height: 200px;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    
+    .modal-food-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .preparation-steps {
+        margin-top: 20px;
+    }
+    
+    .step {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .step:hover {
+        transform: translateX(5px);
+        background: #f0f0f0;
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+    /* Foods to Avoid */
+    
+    .avoid-section {
+        margin-top: 25px;
+        padding: 20px;
+        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        border-radius: 20px;
+    }
+    
+    .avoid-title {
+        color: #c62828;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .avoid-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .avoid-tag {
+        background: white;
+        color: #c62828;
+        padding: 8px 15px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .avoid-tag i {
+        font-size: 0.8rem;
+    }
+    /* General Tips Section */
+    
+    .general-tips {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 50px;
+        padding: 60px 40px;
+        margin-top: 60px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 1s ease 0.4s both;
+    }
+    
+    .general-tips::before {
+        content: '💚';
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        font-size: 150px;
+        opacity: 0.1;
+        transform: rotate(15deg);
+    }
+    
+    .general-tips h3 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+    
+    .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .tip-item {
+        background: rgba(255, 255, 255, 0.1);
+        webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        padding: 30px 25px;
+        text-align: center;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .tip-item:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .tip-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: inline-block;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .tip-item p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    /* Recipe Showcase */
+    
+    .recipe-showcase {
+        margin-top: 60px;
+    }
+    
+    .recipe-title {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 40px;
+    }
+    
+    .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    
+    .recipe-card {
+        background: white;
+        border-radius: 25px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .recipe-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.2);
+    }
+    
+    .recipe-image {
+        height: 180px;
+        overflow: hidden;
+    }
+    
+    .recipe-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .recipe-card:hover .recipe-image img {
+        transform: scale(1.1);
+    }
+    
+    .recipe-info {
+        padding: 20px;
+    }
+    
+    .recipe-info h4 {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .recipe-meta {
+        display: flex;
+        gap: 15px;
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .recipe-meta i {
+        color: #2e7d32;
+    }
+    /* Animations */
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(2deg);
+        }
+    }
+    
+    @keyframes expandWidth {
+        from {
+            width: 0;
+        }
+        to {
+            width: 120px;
+        }
+    }
+    /* Responsive Design */
+    
+    @media (max-width: 768px) {
+        .diet-section {
+            padding: 50px 20px;
+        }
+        .diet-title {
+            font-size: 2.5rem;
+        }
+        .diet-subtitle {
+            font-size: 1rem;
+            padding: 15px 20px;
+        }
+        .dosha-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        .dosha-title {
+            font-size: 2rem;
+        }
+        .general-tips {
+            padding: 40px 20px;
+        }
+        .general-tips h3 {
+            font-size: 2rem;
+        }
+        .tips-grid {
+            grid-template-columns: 1fr;
+        }
+        .modal-content {
+            padding: 30px 20px;
+        }
+    }
+    /* Tooltip */
+    
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background: #333;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+        position: absolute;
+        z-index: 10;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.9rem;
+    }
+    
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<!-- Add Poppins Font and Font Awesome -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Diet Section -->
+<div class="diet-section">
+    <div class="container">
+        <div class="diet-header">
+            <h1 class="diet-title">Ayurvedic Diet Recommendations 🌿</h1>
+            <p class="diet-subtitle">
+                Discover the perfect balance of foods for your dosha type. Eat according to your constitution for optimal health and wellness.
+            </p>
+        </div>
+
+        <!-- Dosha Diet Cards -->
+        <div class="dosha-grid">
+
+            <!-- Vata Diet Card -->
+            <div class="diet-card">
+                <div class="card-header vata">
+                    <img src="https://images.unsplash.com/photo-1543353071-087092ec393a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Vata Foods">
+                    <div class="dosha-icon">🌬️</div>
+                    <div class="dosha-title">VATA</div>
+                </div>
+                <div class="card-content">
+                    <div class="dosha-subtitle">
+                        <i class="fas fa-feather-alt"></i>
+                        <span>Air & Space • Warm & Moist</span>
+                    </div>
+
+                    <div class="food-category">
+                        <div class="category-title">
+                            <i class="fas fa-check-circle"></i> Recommended Foods
+                        </div>
+                        <div class="food-items">
+                            <div class="food-item vata" onclick="showPreparation('warm-soup')">
+                                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Warm Soup">
+                                <span class="food-name">Warm Soups</span>
+                            </div>
+                            <div class="food-item vata" onclick="showPreparation('rice-kheer')">
+                                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Rice Kheer">
+                                <span class="food-name">Rice Kheer</span>
+                            </div>
+                            <div class="food-item vata" onclick="showPreparation('ghee')">
+                                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ghee">
+                                <span class="food-name">Ghee</span>
+                            </div>
+                            <div class="food-item vata" onclick="showPreparation('banana-shake')">
+                                <img src="https://images.unsplash.com/photo-1577805945776-50463a15fdc4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Banana Shake">
+                                <span class="food-name">Banana Shake</span>
+                            </div>
+                            <div class="food-item vata" onclick="showPreparation('khichdi')">
+                                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Khichdi">
+                                <span class="food-name">Khichdi</span>
+                            </div>
+                            <div class="food-item vata" onclick="showPreparation('dates')">
+                                <img src="https://images.unsplash.com/photo-1631726079447-6c5f84a32d8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Dates">
+                                <span class="food-name">Dates</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avoid-section">
+                        <div class="avoid-title">
+                            <i class="fas fa-ban"></i> Foods to Avoid
+                        </div>
+                        <div class="avoid-items">
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Cold foods</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Dry snacks</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Raw vegetables</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Carbonated drinks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pitta Diet Card -->
+            <div class="diet-card">
+                <div class="card-header pitta">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Pitta Foods">
+                    <div class="dosha-icon">🔥</div>
+                    <div class="dosha-title">PITTA</div>
+                </div>
+                <div class="card-content">
+                    <div class="dosha-subtitle">
+                        <i class="fas fa-fire"></i>
+                        <span>Fire & Water • Cool & Calming</span>
+                    </div>
+
+                    <div class="food-category">
+                        <div class="category-title">
+                            <i class="fas fa-check-circle"></i> Recommended Foods
+                        </div>
+                        <div class="food-items">
+                            <div class="food-item pitta" onclick="showPreparation('cucumber-salad')">
+                                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Cucumber Salad">
+                                <span class="food-name">Cucumber Salad</span>
+                            </div>
+                            <div class="food-item pitta" onclick="showPreparation('coconut-water')">
+                                <img src="https://images.unsplash.com/photo-1525385139762-9cbcabc8d9c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Coconut Water">
+                                <span class="food-name">Coconut Water</span>
+                            </div>
+                            <div class="food-item pitta" onclick="showPreparation('watermelon')">
+                                <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Watermelon">
+                                <span class="food-name">Watermelon</span>
+                            </div>
+                            <div class="food-item pitta" onclick="showPreparation('mint-chutney')">
+                                <img src="https://images.unsplash.com/photo-1626094309830-9b171fb99b24?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Mint Chutney">
+                                <span class="food-name">Mint Chutney</span>
+                            </div>
+                            <div class="food-item pitta" onclick="showPreparation('moong-dal')">
+                                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Moong Dal">
+                                <span class="food-name">Moong Dal</span>
+                            </div>
+                            <div class="food-item pitta" onclick="showPreparation('aloe-vera')">
+                                <img src="https://images.unsplash.com/photo-1597843786278-1071d2d82aa6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Aloe Vera">
+                                <span class="food-name">Aloe Vera</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avoid-section">
+                        <div class="avoid-title">
+                            <i class="fas fa-ban"></i> Foods to Avoid
+                        </div>
+                        <div class="avoid-items">
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Spicy food</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Fried items</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Sour fruits</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Fermented foods</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kapha Diet Card -->
+            <div class="diet-card">
+                <div class="card-header kapha">
+                    <img src="https://images.unsplash.com/photo-1543353071-087092ec393a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Kapha Foods">
+                    <div class="dosha-icon">🌊</div>
+                    <div class="dosha-title">KAPHA</div>
+                </div>
+                <div class="card-content">
+                    <div class="dosha-subtitle">
+                        <i class="fas fa-water"></i>
+                        <span>Earth & Water • Light & Warm</span>
+                    </div>
+
+                    <div class="food-category">
+                        <div class="category-title">
+                            <i class="fas fa-check-circle"></i> Recommended Foods
+                        </div>
+                        <div class="food-items">
+                            <div class="food-item kapha" onclick="showPreparation('barley-soup')">
+                                <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Barley Soup">
+                                <span class="food-name">Barley Soup</span>
+                            </div>
+                            <div class="food-item kapha" onclick="showPreparation('steamed-veg')">
+                                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Steamed Vegetables">
+                                <span class="food-name">Steamed Veg</span>
+                            </div>
+                            <div class="food-item kapha" onclick="showPreparation('ginger-tea')">
+                                <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Ginger Tea">
+                                <span class="food-name">Ginger Tea</span>
+                            </div>
+                            <div class="food-item kapha" onclick="showPreparation('honey')">
+                                <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Honey">
+                                <span class="food-name">Honey</span>
+                            </div>
+                            <div class="food-item kapha" onclick="showPreparation('millet-bread')">
+                                <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Millet Bread">
+                                <span class="food-name">Millet Bread</span>
+                            </div>
+                            <div class="food-item kapha" onclick="showPreparation('pumpkin')">
+                                <img src="https://images.unsplash.com/photo-1570586437263-ab629fccc818?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Pumpkin">
+                                <span class="food-name">Pumpkin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="avoid-section">
+                        <div class="avoid-title">
+                            <i class="fas fa-ban"></i> Foods to Avoid
+                        </div>
+                        <div class="avoid-items">
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Oily foods</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Dairy products</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Sweet items</span>
+                            <span class="avoid-tag"><i class="fas fa-times"></i> Cold drinks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Showcase -->
+        <div class="recipe-showcase">
+            <h3 class="recipe-title">Popular Ayurvedic Recipes</h3>
+            <div class="recipe-grid">
+                <div class="recipe-card" onclick="showPreparation('khichdi')">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Khichdi">
+                    </div>
+                    <div class="recipe-info">
+                        <h4>🌿 Healing Khichdi</h4>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 30 mins</span>
+                            <span><i class="fas fa-leaf"></i> Vata/Pitta</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card" onclick="showPreparation('golden-milk')">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Golden Milk">
+                    </div>
+                    <div class="recipe-info">
+                        <h4>🥛 Golden Turmeric Milk</h4>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 10 mins</span>
+                            <span><i class="fas fa-leaf"></i> All Doshas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="recipe-card" onclick="showPreparation('mung-dal')">
+                    <div class="recipe-image">
+                        <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Mung Dal">
+                    </div>
+                    <div class="recipe-info">
+                        <h4>🍲 Mung Dal Soup</h4>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 25 mins</span>
+                            <span><i class="fas fa-leaf"></i> Pitta/Kapha</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- General Tips -->
+        <div class="general-tips">
+            <h3>💚 General Healthy Diet Tips</h3>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <div class="tip-icon">🌅</div>
+                    <p>Eat your largest meal at noon when digestion is strongest</p>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">💧</div>
+                    <p>Drink warm water throughout the day</p>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🌿</div>
+                    <p>Choose fresh, seasonal, organic foods</p>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🧘</div>
+                    <p>Practice mindful eating - no screens during meals</p>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">⚖️</div>
+                    <p>Eat only when you're truly hungry</p>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon">🌙</div>
+                    <p>Have dinner at least 3 hours before sleep</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Food Preparation Modal -->
+<div class="preparation-modal" id="preparationModal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        <div class="modal-food-image" id="modalFoodImage">
+            <img src="" alt="Food" id="modalImageSrc">
+        </div>
+        <h2 id="modalFoodTitle">Khichdi Preparation</h2>
+        <div class="dosha-subtitle" id="modalDosha">
+            <i class="fas fa-leaf"></i> <span>Balances Vata and Pitta</span>
+        </div>
+
+        <div class="preparation-steps" id="preparationSteps">
+            <!-- Steps will be populated by JavaScript -->
+        </div>
+
+        <div class="benefits">
+            <h4><i class="fas fa-heart"></i> Health Benefits</h4>
+            <p id="modalBenefits">Easy to digest, nourishing, and balances all doshas.</p>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Interactivity -->
+<script>
+    // Food preparation data
+    const foodData = {
+        'khichdi': {
+            title: 'Healing Khichdi',
+            dosha: 'Balances Vata and Pitta',
+            image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Wash 1/2 cup rice and 1/4 cup moong dal thoroughly',
+                'Heat 1 tbsp ghee in a pressure cooker',
+                'Add 1 tsp cumin seeds, 1/2 tsp turmeric powder',
+                'Add the rice and dal, sauté for 2 minutes',
+                'Add 3 cups water and salt to taste',
+                'Pressure cook for 3-4 whistles',
+                'Garnish with fresh coriander and serve hot'
+            ],
+            benefits: 'Easy to digest, nourishing, and balances all doshas. Great for recovery and daily nourishment.'
+        },
+        'warm-soup': {
+            title: 'Vata-Balancing Warm Soup',
+            dosha: 'Perfect for Vata Dosha',
+            image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Heat 1 tbsp ghee in a pan',
+                'Add 1/2 tsp cumin seeds and 1/4 tsp asafoetida',
+                'Add chopped carrots, pumpkin, and zucchini',
+                'Sauté for 5 minutes',
+                'Add 2 cups water and salt to taste',
+                'Simmer for 15 minutes until vegetables are soft',
+                'Blend slightly for a creamy texture',
+                'Garnish with fresh coriander'
+            ],
+            benefits: 'Warm, nourishing, and grounding for Vata. Provides essential nutrients and easy digestion.'
+        },
+        'rice-kheer': {
+            title: 'Warm Rice Kheer',
+            dosha: 'Balances Vata and Pitta',
+            image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Wash 1/4 cup basmati rice',
+                'Boil 1 liter full-fat milk in a heavy-bottom pan',
+                'Add rice and simmer on low heat',
+                'Stir occasionally to prevent sticking',
+                'Cook until rice is soft and milk reduces',
+                'Add 2 tbsp jaggery or honey',
+                'Add cardamom powder and chopped nuts',
+                'Serve warm'
+            ],
+            benefits: 'Nourishing, sweet, and calming. Good for Vata and Pitta doshas.'
+        },
+        'ghee': {
+            title: 'Homemade Ghee',
+            dosha: 'Beneficial for all doshas',
+            image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Take 500g unsalted butter in a heavy-bottom pan',
+                'Heat on medium flame until butter melts',
+                'Reduce heat and simmer',
+                'Milk solids will settle at bottom and turn golden',
+                'When ghee turns clear and aromatic, turn off heat',
+                'Let it cool slightly',
+                'Strain through cheesecloth into a glass jar',
+                'Store in airtight container'
+            ],
+            benefits: 'Improves digestion, nourishes tissues, and enhances mental clarity.'
+        },
+        'cucumber-salad': {
+            title: 'Cooling Cucumber Salad',
+            dosha: 'Perfect for Pitta Dosha',
+            image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Slice 2 cucumbers thinly',
+                'Chop fresh mint and coriander leaves',
+                'Mix cucumber with herbs',
+                'Add juice of 1 lemon',
+                'Add pinch of rock salt',
+                'Add 1 tsp roasted cumin powder',
+                'Toss well and let it sit for 10 minutes',
+                'Serve chilled'
+            ],
+            benefits: 'Cooling, refreshing, and perfect for balancing Pitta. Aids digestion.'
+        },
+        'coconut-water': {
+            title: 'Fresh Coconut Water',
+            dosha: 'Balances Pitta',
+            image: 'https://images.unsplash.com/photo-1525385139762-9cbcabc8d9c4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Choose a fresh tender coconut',
+                'Cut the top with a cleaver',
+                'Insert a straw directly',
+                'Add mint leaves for extra cooling',
+                'Drink immediately for best benefits'
+            ],
+            benefits: 'Naturally cooling, hydrating, and rich in electrolytes. Excellent for Pitta.'
+        },
+        'ginger-tea': {
+            title: 'Warming Ginger Tea',
+            dosha: 'Balances Vata and Kapha',
+            image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Grate 1 inch fresh ginger',
+                'Boil 2 cups water',
+                'Add grated ginger',
+                'Simmer for 5-7 minutes',
+                'Add honey to taste',
+                'Add lemon juice if desired',
+                'Strain and serve warm'
+            ],
+            benefits: 'Improves digestion, reduces inflammation, and boosts immunity.'
+        },
+        'golden-milk': {
+            title: 'Golden Turmeric Milk',
+            dosha: 'Balances all doshas',
+            image: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+            steps: [
+                'Heat 1 cup milk (dairy or plant-based)',
+                'Add 1 tsp turmeric powder',
+                'Add pinch of black pepper',
+                'Add 1 tsp ghee',
+                'Add honey or maple syrup to taste',
+                'Whisk well and simmer for 5 minutes',
+                'Pour into cup and sprinkle with cinnamon',
+                'Drink warm before bedtime'
+            ],
+            benefits: 'Anti-inflammatory, immune-boosting, and promotes restful sleep.'
+        }
+    };
+
+    function showPreparation(foodKey) {
+        const modal = document.getElementById('preparationModal');
+        const food = foodData[foodKey];
+
+        if (food) {
+            document.getElementById('modalFoodTitle').textContent = food.title;
+            document.getElementById('modalDosha').querySelector('span').textContent = food.dosha;
+            document.getElementById('modalImageSrc').src = food.image;
+            document.getElementById('modalBenefits').textContent = food.benefits;
+
+            const stepsContainer = document.getElementById('preparationSteps');
+            stepsContainer.innerHTML = '';
+
+            food.steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div>${step}</div>
+                `;
+                stepsContainer.appendChild(stepDiv);
+            });
+
+            modal.classList.add('active');
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('preparationModal').classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('preparationModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    // Smooth scroll to top
+    document.querySelectorAll('.recipe-card').forEach(card => {
+        card.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Add animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.diet-card, .tip-item, .recipe-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+{% endblock %}

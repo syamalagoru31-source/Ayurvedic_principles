@@ -1,0 +1,1412 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<style>
+    /* Global Styles */
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #f8faf8 0%, #f0f5f0 100%);
+        margin: 0;
+        padding: 0;
+    }
+    /* Remedy Section */
+    
+    .remedy-section {
+        position: relative;
+        padding: 80px 0;
+        background: linear-gradient(135deg, rgba(46, 125, 50, 0.03) 0%, rgba(27, 94, 32, 0.03) 100%);
+        overflow: hidden;
+    }
+    /* Decorative Background Elements */
+    
+    .remedy-section::before {
+        content: '🌿';
+        position: absolute;
+        top: 50px;
+        left: 30px;
+        font-size: 150px;
+        opacity: 0.03;
+        transform: rotate(-15deg);
+        animation: float 8s ease-in-out infinite;
+        pointer-events: none;
+    }
+    
+    .remedy-section::after {
+        content: '🍃';
+        position: absolute;
+        bottom: 50px;
+        right: 30px;
+        font-size: 200px;
+        opacity: 0.03;
+        transform: rotate(15deg);
+        animation: float 10s ease-in-out infinite reverse;
+        pointer-events: none;
+    }
+    /* Container */
+    
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 2;
+    }
+    /* Header Section */
+    
+    .remedy-header {
+        text-align: center;
+        margin-bottom: 60px;
+        position: relative;
+    }
+    
+    .remedy-title {
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 20px;
+        position: relative;
+        display: inline-block;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .remedy-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 2px;
+        animation: expandWidth 1s ease 0.5s both;
+    }
+    
+    .remedy-subtitle {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 30px auto 0;
+        line-height: 1.8;
+        animation: fadeInUp 1s ease 0.2s both;
+        padding: 20px 30px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    /* Age Group Tabs */
+    
+    .age-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 50px;
+        animation: fadeInUp 1s ease 0.3s both;
+        flex-wrap: wrap;
+    }
+    
+    .age-tab {
+        padding: 15px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: white;
+        color: #666;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+        border: 2px solid transparent;
+    }
+    
+    .age-tab::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .age-tab:hover::before {
+        left: 100%;
+    }
+    
+    .age-tab.active {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(46, 125, 50, 0.3);
+    }
+    
+    .age-tab.children {
+        border-bottom: 4px solid #3498db;
+    }
+    
+    .age-tab.adults {
+        border-bottom: 4px solid #e67e22;
+    }
+    
+    .age-tab.seniors {
+        border-bottom: 4px solid #9b59b6;
+    }
+    /* Daily Schedule Timeline */
+    
+    .daily-schedule {
+        background: white;
+        border-radius: 50px;
+        padding: 50px;
+        margin-bottom: 60px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 1s ease 0.4s both;
+    }
+    
+    .schedule-title {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 40px;
+        position: relative;
+    }
+    
+    .schedule-title span {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        padding: 5px 20px;
+        border-radius: 30px;
+        font-size: 1.2rem;
+        margin-left: 15px;
+        display: inline-block;
+    }
+    
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 2px;
+        animation: pulse 2s infinite;
+    }
+    
+    .timeline-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        position: relative;
+        animation: slideInRight 0.5s ease backwards;
+    }
+    
+    .timeline-item:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+    
+    .time-badge {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+        position: relative;
+        z-index: 2;
+        animation: pulse 2s infinite;
+    }
+    
+    .time-badge .time {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+    
+    .time-badge .period {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+    
+    .timeline-content {
+        width: calc(50% - 100px);
+        background: #f8f9fa;
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.2);
+    }
+    
+    .timeline-content h4 {
+        font-size: 1.5rem;
+        color: #2e7d32;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .remedy-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .remedy-list li {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        color: #666;
+        animation: slideInLeft 0.3s ease backwards;
+    }
+    
+    .remedy-list li i {
+        width: 30px;
+        height: 30px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+    /* Remedies Grid */
+    
+    .remedies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    /* Remedy Card */
+    
+    .remedy-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        position: relative;
+        animation: fadeInUp 0.6s ease backwards;
+    }
+    
+    .remedy-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(46, 125, 50, 0.2);
+    }
+    
+    .card-header {
+        height: 150px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-header.children {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    }
+    
+    .card-header.adults {
+        background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    }
+    
+    .card-header.seniors {
+        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    }
+    
+    .card-header img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.3;
+        mix-blend-mode: overlay;
+    }
+    
+    .age-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        animation: float 3s ease-in-out infinite;
+        z-index: 2;
+    }
+    
+    .age-title {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: white;
+        font-size: 2rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 2;
+    }
+    
+    .card-content {
+        padding: 30px;
+    }
+    
+    .remedy-category {
+        margin-bottom: 25px;
+    }
+    
+    .category-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .category-title i {
+        color: #2e7d32;
+    }
+    
+    .remedy-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .remedy-tag {
+        background: #f8f9fa;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 1px solid #e0e0e0;
+    }
+    
+    .remedy-tag:hover {
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(46, 125, 50, 0.2);
+        border-color: transparent;
+    }
+    
+    .remedy-tag:hover i {
+        color: white;
+    }
+    
+    .remedy-tag i {
+        color: #2e7d32;
+        transition: color 0.3s ease;
+    }
+    /* Morning Rituals Section */
+    
+    .morning-rituals {
+        background: linear-gradient(135deg, #fff9e6 0%, #fff3d4 100%);
+        border-radius: 50px;
+        padding: 60px;
+        margin: 60px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .morning-rituals::before {
+        content: '🌅';
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        font-size: 150px;
+        opacity: 0.1;
+        transform: rotate(15deg);
+        pointer-events: none;
+    }
+    
+    .rituals-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+    }
+    
+    .ritual-card {
+        background: white;
+        border-radius: 30px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    
+    .ritual-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+    }
+    
+    .ritual-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+        color: white;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    .ritual-card h4 {
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .ritual-card p {
+        color: #666;
+        line-height: 1.6;
+        margin: 0;
+    }
+    /* Search Box */
+    
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto 50px;
+        animation: fadeInUp 1s ease 0.3s both;
+    }
+    
+    .search-box {
+        position: relative;
+        background: white;
+        border-radius: 50px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box:focus-within {
+        box-shadow: 0 15px 40px rgba(46, 125, 50, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .search-box input {
+        width: 100%;
+        padding: 20px 120px 20px 60px;
+        border: none;
+        font-size: 1.1rem;
+        outline: none;
+        background: white;
+    }
+    
+    .search-box i {
+        position: absolute;
+        left: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #2e7d32;
+        font-size: 1.2rem;
+    }
+    
+    .search-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+        color: white;
+        border: none;
+        border-radius: 40px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+    
+    .search-btn:hover {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        transform: translateY(-50%) scale(1.05);
+    }
+    /* Animations */
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(2deg);
+        }
+    }
+    
+    @keyframes expandWidth {
+        from {
+            width: 0;
+        }
+        to {
+            width: 120px;
+        }
+    }
+    
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+    /* Responsive Design */
+    
+    @media (max-width: 768px) {
+        .remedy-section {
+            padding: 50px 20px;
+        }
+        .remedy-title {
+            font-size: 2.5rem;
+        }
+        .remedy-subtitle {
+            font-size: 1rem;
+            padding: 15px 20px;
+        }
+        .age-tabs {
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .age-tab {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 30px;
+            font-size: 1rem;
+        }
+        .daily-schedule {
+            padding: 30px 20px;
+        }
+        .schedule-title {
+            font-size: 1.8rem;
+        }
+        .schedule-title span {
+            display: block;
+            margin: 10px 0 0 0;
+            font-size: 1rem;
+        }
+        .timeline::before {
+            left: 40px;
+        }
+        .timeline-item,
+        .timeline-item:nth-child(even) {
+            flex-direction: column;
+            align-items: flex-start;
+            margin-left: 60px;
+        }
+        .time-badge {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        .time-badge .time {
+            font-size: 1.2rem;
+        }
+        .timeline-content {
+            width: 100%;
+        }
+        .remedies-grid {
+            grid-template-columns: 1fr;
+        }
+        .morning-rituals {
+            padding: 40px 20px;
+        }
+        .rituals-grid {
+            grid-template-columns: 1fr;
+        }
+        .search-box input {
+            padding: 15px 100px 15px 50px;
+            font-size: 1rem;
+        }
+        .search-btn {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+    }
+    /* No Result Styling */
+    
+    .no-result {
+        text-align: center;
+        padding: 60px;
+        background: white;
+        border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+    
+    .no-result i {
+        font-size: 4rem;
+        color: #2e7d32;
+        margin-bottom: 20px;
+        display: block;
+    }
+    
+    .no-result p {
+        color: #666;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+    /* Loading State */
+    
+    .loading {
+        text-align: center;
+        padding: 40px;
+    }
+    
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f0f0f0;
+        border-top: 5px solid #2e7d32;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    /* Utility Classes */
+    
+    .text-center {
+        text-align: center;
+    }
+    
+    .mt-4 {
+        margin-top: 40px;
+    }
+    
+    .mb-4 {
+        margin-bottom: 40px;
+    }
+    
+    .hidden {
+        display: none;
+    }
+</style>
+
+<!-- Add Poppins Font and Font Awesome -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Remedy Section -->
+<div class="remedy-section">
+    <div class="container">
+        <div class="remedy-header">
+            <h1 class="remedy-title">Daily Wellness Remedies</h1>
+            <p class="remedy-subtitle">
+                Age-specific Ayurvedic remedies and daily routines for optimal health at every stage of life. From children to seniors, discover natural ways to maintain wellness.
+            </p>
+        </div>
+
+        <!-- Search Box -->
+        <div class="search-container">
+            <form method="GET" class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" name="q" placeholder="Search for remedies, diseases, or age groups..." value="{{ request.GET.q }}">
+                <button type="submit" class="search-btn">Search</button>
+            </form>
+        </div>
+
+        <!-- Age Group Tabs -->
+        <div class="age-tabs">
+            <button class="age-tab children active" onclick="filterAge('children', this)">
+                <i class="fas fa-child"></i> Children (3-12 years)
+            </button>
+            <button class="age-tab adults" onclick="filterAge('adults', this)">
+                <i class="fas fa-user"></i> Adults (18-50 years)
+            </button>
+            <button class="age-tab seniors" onclick="filterAge('seniors', this)">
+                <i class="fas fa-user-plus"></i> Senior Citizens (50+ years)
+            </button>
+        </div>
+
+        <!-- Daily Schedule for Selected Age Group -->
+        <div class="daily-schedule" id="childrenSchedule">
+            <h2 class="schedule-title">
+                Children's Daily Wellness Routine
+                <span>3-12 years</span>
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">6:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-sun"></i> Morning Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Wake up with sun, drink warm water with honey</li>
+                            <li><i class="fas fa-check"></i> Oil massage (Abhyanga) with sesame oil</li>
+                            <li><i class="fas fa-check"></i> Warm bath with herbal water</li>
+                            <li><i class="fas fa-check"></i> Pranayama for 5 minutes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">8:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-apple-alt"></i> Breakfast</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Warm oatmeal with ghee and honey</li>
+                            <li><i class="fas fa-check"></i> Fresh fruit (banana, apple)</li>
+                            <li><i class="fas fa-check"></i> Almond milk with turmeric</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">12:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-utensils"></i> Lunch</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Rice with moong dal (khichdi)</li>
+                            <li><i class="fas fa-check"></i> Steamed vegetables</li>
+                            <li><i class="fas fa-check"></i> Buttermilk with roasted cumin</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">4:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-mug-hot"></i> Evening Snack</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Fresh fruit or dry fruits</li>
+                            <li><i class="fas fa-check"></i> Herbal tea (tulsi, ginger)</li>
+                            <li><i class="fas fa-check"></i> Homemade snacks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">7:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-moon"></i> Dinner</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Light soup or vegetable stew</li>
+                            <li><i class="fas fa-check"></i> Warm milk with turmeric</li>
+                            <li><i class="fas fa-check"></i> Early dinner (before 8 PM)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="daily-schedule" id="adultsSchedule" style="display: none;">
+            <h2 class="schedule-title">
+                Adults' Daily Wellness Routine
+                <span>18-50 years</span>
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">5:30</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-sun"></i> Brahma Muhurta Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Wake up, drink warm lemon water</li>
+                            <li><i class="fas fa-check"></i> Tongue scraping and oil pulling</li>
+                            <li><i class="fas fa-check"></i> Meditation for 15-20 minutes</li>
+                            <li><i class="fas fa-check"></i> Pranayama (Anulom Vilom)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">7:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-dumbbell"></i> Exercise & Yoga</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Surya Namaskar (12 rounds)</li>
+                            <li><i class="fas fa-check"></i> Yoga asanas for 30 minutes</li>
+                            <li><i class="fas fa-check"></i> Light cardio or walking</li>
+                            <li><i class="fas fa-check"></i> Shavasana for relaxation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">8:30</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-apple-alt"></i> Breakfast</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Warm, cooked breakfast</li>
+                            <li><i class="fas fa-check"></i> Fresh seasonal fruits</li>
+                            <li><i class="fas fa-check"></i> Herbal tea or warm milk</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">12:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-utensils"></i> Largest Meal - Lunch</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Whole grains (rice, chapati)</li>
+                            <li><i class="fas fa-check"></i> Dal or legumes</li>
+                            <li><i class="fas fa-check"></i> Seasonal vegetables</li>
+                            <li><i class="fas fa-check"></i> Salad with lemon</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">6:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-mug-hot"></i> Evening Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Light herbal tea</li>
+                            <li><i class="fas fa-check"></i> Short walk or stretching</li>
+                            <li><i class="fas fa-check"></i> Early light dinner (before 7 PM)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">10:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-moon"></i> Bedtime Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Warm milk with nutmeg</li>
+                            <li><i class="fas fa-check"></i> Foot massage with sesame oil</li>
+                            <li><i class="fas fa-check"></i> Read or meditate</li>
+                            <li><i class="fas fa-check"></i> No screens 1 hour before bed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="daily-schedule" id="seniorsSchedule" style="display: none;">
+            <h2 class="schedule-title">
+                Senior Citizens' Daily Wellness Routine
+                <span>50+ years</span>
+            </h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">6:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-sun"></i> Gentle Morning Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Wake up gently, warm water with honey</li>
+                            <li><i class="fas fa-check"></i> Gentle oil massage with warm sesame oil</li>
+                            <li><i class="fas fa-check"></i> Warm bath with Epsom salt</li>
+                            <li><i class="fas fa-check"></i> Light stretching or chair yoga</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">8:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-heartbeat"></i> Morning Medications & Breakfast</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Take prescribed medications</li>
+                            <li><i class="fas fa-check"></i> Warm, easily digestible breakfast</li>
+                            <li><i class="fas fa-check"></i> Soaked almonds and raisins</li>
+                            <li><i class="fas fa-check"></i> Herbal tea (tulsi, ginger, cinnamon)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">10:00</span>
+                        <span class="period">AM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-walking"></i> Morning Walk & Social Time</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Gentle 20-30 minute walk</li>
+                            <li><i class="fas fa-check"></i> Sunlight exposure for Vitamin D</li>
+                            <li><i class="fas fa-check"></i> Socialize with friends/family</li>
+                            <li><i class="fas fa-check"></i> Light gardening if interested</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">12:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-utensils"></i> Nourishing Lunch</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Soft, cooked vegetables</li>
+                            <li><i class="fas fa-check"></i> Moong dal soup or khichdi</li>
+                            <li><i class="fas fa-check"></i> Buttermilk with ginger</li>
+                            <li><i class="fas fa-check"></i> Cooked fruits like apple compote</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">2:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-bed"></i> Afternoon Rest</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Short nap (20-30 minutes)</li>
+                            <li><i class="fas fa-check"></i> Reading or listening to music</li>
+                            <li><i class="fas fa-check"></i> Meditation or prayer</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">5:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-mug-hot"></i> Evening Tea & Light Exercise</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Herbal tea with light snacks</li>
+                            <li><i class="fas fa-check"></i> Gentle stretching or chair yoga</li>
+                            <li><i class="fas fa-check"></i> Deep breathing exercises</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">7:00</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-moon"></i> Light Dinner</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Vegetable soup or stew</li>
+                            <li><i class="fas fa-check"></i> Warm milk with turmeric</li>
+                            <li><i class="fas fa-check"></i> Early, light meal</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="time-badge">
+                        <span class="time">9:30</span>
+                        <span class="period">PM</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h4><i class="fas fa-bed"></i> Bedtime Routine</h4>
+                        <ul class="remedy-list">
+                            <li><i class="fas fa-check"></i> Warm foot bath with Epsom salt</li>
+                            <li><i class="fas fa-check"></i> Gentle foot massage</li>
+                            <li><i class="fas fa-check"></i> Listen to calm music</li>
+                            <li><i class="fas fa-check"></i> Early to bed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Morning Rituals for All Ages -->
+        <div class="morning-rituals">
+            <h2 class="schedule-title">Universal Morning Rituals for All Ages</h2>
+            <div class="rituals-grid">
+                <div class="ritual-card">
+                    <div class="ritual-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <h4>Oil Pulling</h4>
+                    <p>Swish 1 tbsp sesame oil in mouth for 10-15 minutes. Removes toxins and improves oral health.</p>
+                </div>
+                <div class="ritual-card">
+                    <div class="ritual-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h4>Tongue Scraping</h4>
+                    <p>Clean tongue with copper scraper to remove toxins and improve digestion.</p>
+                </div>
+                <div class="ritual-card">
+                    <div class="ritual-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h4>Pranayama</h4>
+                    <p>5-10 minutes of deep breathing exercises to oxygenate blood and calm mind.</p>
+                </div>
+                <div class="ritual-card">
+                    <div class="ritual-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Meditation</h4>
+                    <p>5-15 minutes of mindfulness to reduce stress and improve focus.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Remedies Grid -->
+        <div class="remedies-grid">
+
+            <!-- Children's Remedies -->
+            <div class="remedy-card age-group" data-age="children">
+                <div class="card-header children">
+                    <img src="https://images.unsplash.com/photo-1545558014-238207357601?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Children">
+                    <div class="age-icon">👶</div>
+                    <div class="age-title">Children</div>
+                </div>
+                <div class="card-content">
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-shield-alt"></i> Immunity Boosters
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Chyawanprash (1 tsp daily)</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Tulsi drops</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Giloy tablets</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-apple-alt"></i> Digestive Health
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Hingwastak powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ginger honey water</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ajwain water</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-brain"></i> Brain Development
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Brahmi syrup</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Almonds soaked</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ashwagandha powder</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-sun"></i> Common Ailments
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Cold: Tulsi ginger tea</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Cough: Honey + turmeric</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Fever: Giloy + tulsi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adults' Remedies -->
+            <div class="remedy-card age-group" data-age="adults">
+                <div class="card-header adults">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Adults">
+                    <div class="age-icon">🧑</div>
+                    <div class="age-title">Adults</div>
+                </div>
+                <div class="card-content">
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-bolt"></i> Energy & Vitality
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ashwagandha (1 tsp)</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Shilajit resin</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Safed Musli powder</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-heart"></i> Stress Management
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Brahmi capsules</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Jatamansi roots</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Meditation herbs</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-dumbbell"></i> Joint & Muscle Health
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Shallaki powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Nirgundi oil massage</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Yograj guggul</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-apple-alt"></i> Digestive Health
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Triphala powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ginger lemon tea</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ajmoda seeds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Senior Citizens' Remedies -->
+            <div class="remedy-card age-group" data-age="seniors">
+                <div class="card-header seniors">
+                    <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Senior Citizens">
+                    <div class="age-icon">👴</div>
+                    <div class="age-title">Seniors</div>
+                </div>
+                <div class="card-content">
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-heartbeat"></i> Joint Care
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Dashmool kwath</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Mahanarayan oil</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Boswellia capsules</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-memory"></i> Memory & Cognition
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Shankhpushpi syrup</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Gotu kola powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ginkgo biloba</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-heart"></i> Heart Health
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Arjuna bark powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Garlic capsules</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Hawthorn berry</span>
+                        </div>
+                    </div>
+
+                    <div class="remedy-category">
+                        <div class="category-title">
+                            <i class="fas fa-walking"></i> Digestive Support
+                        </div>
+                        <div class="remedy-items">
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Ginger powder</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Fennel seeds after meals</span>
+                            <span class="remedy-tag"><i class="fas fa-leaf"></i> Hing for gas relief</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if request.GET.q and not diseases %}
+        <div class="no-result">
+            <i class="fas fa-search"></i>
+            <p>No remedies found for "{{ request.GET.q }}". Please try different keywords.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- JavaScript for Interactivity -->
+<script>
+    function filterAge(age, element) {
+        // Update active tab
+        document.querySelectorAll('.age-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        element.classList.add('active');
+
+        // Show corresponding schedule
+        document.getElementById('childrenSchedule').style.display = 'none';
+        document.getElementById('adultsSchedule').style.display = 'none';
+        document.getElementById('seniorsSchedule').style.display = 'none';
+
+        if (age === 'children') {
+            document.getElementById('childrenSchedule').style.display = 'block';
+        } else if (age === 'adults') {
+            document.getElementById('adultsSchedule').style.display = 'block';
+        } else if (age === 'seniors') {
+            document.getElementById('seniorsSchedule').style.display = 'block';
+        }
+
+        // Filter remedy cards
+        document.querySelectorAll('.age-group').forEach(card => {
+            if (card.dataset.age === age) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize with children view
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set initial state
+        const childrenTab = document.querySelector('.age-tab.children');
+        if (childrenTab) {
+            filterAge('children', childrenTab);
+        }
+
+        // Add scroll animation for timeline items
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        timelineItems.forEach((item, index) => {
+            item.style.animationDelay = (index * 0.1) + 's';
+        });
+
+        // Add hover effect for remedy tags
+        const remedyTags = document.querySelectorAll('.remedy-tag');
+        remedyTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                alert('More information about: ' + this.textContent.trim());
+            });
+        });
+
+        // Smooth scroll to top when clicking on age tabs
+        const ageTabs = document.querySelectorAll('.age-tab');
+        ageTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const schedule = document.querySelector('.daily-schedule');
+                if (schedule) {
+                    window.scrollTo({
+                        top: schedule.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
